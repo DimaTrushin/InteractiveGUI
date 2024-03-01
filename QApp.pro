@@ -40,6 +40,13 @@ macx {
  macx-clang*{
  }
 }
+#CONFIG += conan_basic_setup
+include($${OUT_PWD}/conanbuildinfo.pri)
+
+# Qwt
+DEFINES += $$CONAN_DEFINES_QWT
+INCLUDEPATH += $$CONAN_INCLUDEPATH_QWT
+LIBS += $$CONAN_LIBDIRS_QWT $$CONAN_LIBS_QWT
 
 SOURCES += \
   Except.cpp \

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <qwt_plot.h>
+#include <qwt_plot_curve.h>
 
 #include <memory>
 
@@ -21,7 +23,8 @@ public:
   ~MainWindow();
 
 private:
-  std::unique_ptr<Ui::MainWindow> ui;
+  std::unique_ptr<Ui::MainWindow> ui_;
+  std::unique_ptr<QwtPlot> plot_;
 };
 } // namespace Interface
 } // namespace QApp

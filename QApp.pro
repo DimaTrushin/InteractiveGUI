@@ -48,6 +48,15 @@ DEFINES += $$CONAN_DEFINES_QWT
 INCLUDEPATH += $$CONAN_INCLUDEPATH_QWT
 LIBS += $$CONAN_LIBDIRS_QWT $$CONAN_LIBS_QWT
 
+#OneApi TBB
+DEFINES += $$CONAN_DEFINES_ONETBB
+INCLUDEPATH += $$CONAN_INCLUDEPATH_ONETBB
+LIBS += $$CONAN_LIBDIRS_ONETBB $$CONAN_LIBS_ONETBB
+# this path contains required dlls and is added to the run environment by QtCreator
+# make sure to check Run option "Add build library search path to Path"
+LIBS += -L$$CONAN_BINDIRS_ONETBB
+
+
 SOURCES += \
   Except.cpp \
     Interface/MainWindow.cpp \

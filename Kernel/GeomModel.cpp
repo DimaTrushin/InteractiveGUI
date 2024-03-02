@@ -8,7 +8,10 @@
 namespace QApp {
 namespace Kernel {
 
-GeomModel::GeomModel() {
+GeomModel::GeomModel()
+    : in_port_([this](FieldDataArg data) { onFieldData(data); },
+               [this](FieldDataArg data) { onFieldData(data); },
+               ObserverField::doNothing) {
 }
 
 void GeomModel::subscribe(Observer* obs) {
@@ -33,10 +36,15 @@ void GeomModel::onMouseAction(const MouseAction& action) {
   }
 }
 
+GeomModel::ObserverField* GeomModel::port() {
+  return &in_port_;
+}
+
 void GeomModel::onMousePress(const QPointF& position) {
   int index = touchedItem(position);
   if (index != k_non) {
     active_index_ = index;
+    assert(data_.has_value());
     diff_ = position - data_->items[index].center;
   }
 }
@@ -64,6 +72,30 @@ int GeomModel::touchedItem(const QPointF& position) const {
     --index;
   }
   return k_non;
+}
+
+void GeomModel::onFieldData(FieldDataArg data) {
+  if (!data.has_value()) {
+    if (data_.has_value()) {
+      data_.reset();
+      port_.notify();
+    }
+    return;
+  }
+  const Field& field = *data;
+  if (!data_.has_value())
+    data_.emplace();
+  data_->field.rows = field.rows();
+  data_->field.columns = field.columns();
+  data_->field.hight = k_hight;
+  data_->field.width = k_width;
+  data_->items.reserve(field.items().size());
+  for (const auto& item : field.items()) {
+    using DrawItem = DrawData::Item;
+    data_->items.emplace_back(
+        DrawItem{.center = {0.5 + item.row(), 0.5 + item.column()}});
+  }
+  port_.notify();
 }
 
 } // namespace Kernel

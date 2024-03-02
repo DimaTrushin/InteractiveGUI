@@ -17,6 +17,7 @@ namespace Interface {
 class View : public QObject {
   Q_OBJECT
   using DrawData = Kernel::DrawData;
+  using FieldData = DrawData::FieldData;
   using Data = std::optional<DrawData>;
   using ByReference = NSLibrary::CByReference;
   using ObserverState = NSLibrary::CObserver<Data, ByReference>;
@@ -45,6 +46,7 @@ private:
   void drawData(const Data& data);
   void clear();
   void draw(const DrawData& data);
+  void drawField(const FieldData& field);
   void addItem(const DrawData::Item& item);
 
   QwtPlot* plot_;

@@ -11,6 +11,7 @@ ApplicationImpl::ApplicationImpl()
   main_window_.show();
   int num_threads = oneapi::tbb::info::default_concurrency();
   qDebug() << "threads =" << num_threads;
+  model_.subscribe(geom_model_.port());
   geom_model_.subscribe(view_.port());
   view_.subscribe(controller_.port());
 }

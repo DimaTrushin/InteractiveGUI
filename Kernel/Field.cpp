@@ -41,6 +41,12 @@ void FieldItem::moveTo(int row, int column) {
   column_ = column;
 }
 
+Field::Field() {
+  items_.reserve(2);
+  items_.emplace_back(0, 0);
+  items_.emplace_back(1, 1);
+}
+
 int Field::rows() const {
   return rows_;
 }

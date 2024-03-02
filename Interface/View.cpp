@@ -72,9 +72,16 @@ void View::clear() {
 
 void View::draw(const DrawData& data) {
   plot_->detachItems();
+  drawField(data.field);
   for (const auto& item : data.items)
     addItem(item);
   plot_->replot();
+}
+
+void View::drawField(const FieldData& field) {
+  plot_->setAxisScale(QwtAxis::YLeft, -1, field.rows + 1, 1);
+  plot_->setAxisScale(QwtAxis::XBottom, -1, field.columns + 1, 1);
+  // TO DO
 }
 
 void View::addItem(const DrawData::Item& item) {

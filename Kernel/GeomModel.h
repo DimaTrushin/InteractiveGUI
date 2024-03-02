@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DrawData.h"
+#include "Field.h"
 #include "Library/Observer3/Observer.h"
 #include "MouseAction.h"
 
@@ -16,11 +17,16 @@ class GeomModel {
   using Observable = NSLibrary::CObservable<Data, ByReference>;
   using Observer = NSLibrary::CObserver<Data, ByReference>;
 
+  using FieldData = std::optional<Field>;
+  using ObserverField = NSLibrary::CObserver<FieldData>;
+  using FieldDataArg = ObserverField::CArg;
+
 public:
   GeomModel();
 
   void subscribe(Observer* obs);
   void onMouseAction(const MouseAction& action);
+  ObserverField* port();
 
 private:
   void onMousePress(const QPointF& position);
@@ -29,12 +35,17 @@ private:
 
   int touchedItem(const QPointF& position) const;
 
-  static constexpr int k_non = -1;
+  void onFieldData(FieldDataArg data);
 
-  Data data_ = DrawData{};
+  static constexpr int k_non = -1;
+  static constexpr double k_hight = 1.;
+  static constexpr double k_width = 1.;
+
+  Data data_;
   int active_index_ = k_non;
   QPointF diff_ = {0., 0.};
   Observable port_ = [this]() -> const Data& { return data_; };
+  ObserverField in_port_;
 };
 
 } // namespace Kernel

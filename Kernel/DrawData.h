@@ -10,8 +10,10 @@ namespace Kernel {
 
 struct DrawData {
   struct FieldData {
-    int rows = 3;
-    int columns = 3;
+    int rows;
+    int columns;
+    double hight = 1.;
+    double width = 1.;
     QPointF origin = {0., 0.};
   };
   struct Item {
@@ -22,7 +24,7 @@ struct DrawData {
   };
 
   FieldData field;
-  std::vector<Item> items = {{}, {.center = {1.5, 1.5}, .fill = {Qt::green}}};
+  std::vector<Item> items;
 };
 
 } // namespace Kernel

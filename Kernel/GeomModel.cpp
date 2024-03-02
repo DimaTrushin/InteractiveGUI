@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include <cassert>
+#include <ranges>
 
 namespace QApp {
 namespace Kernel {
@@ -33,29 +34,36 @@ void GeomModel::onMouseAction(const MouseAction& action) {
 }
 
 void GeomModel::onMousePress(const QPointF& position) {
-  if (isItem1Touched(position)) {
-    status_ = ItemStatus::Active;
-    diff_ = position - data_->item1.center;
+  int index = touchedItem(position);
+  if (index != k_non) {
+    active_index_ = index;
+    diff_ = position - data_->items[index].center;
   }
 }
 
 void GeomModel::onMouseMove(const QPointF& position) {
-  if (status_ == ItemStatus::Active && data_.has_value()) {
-    data_->item1.center = position - diff_;
+  if (data_.has_value() && active_index_ != k_non) {
+    data_->items[active_index_].center = position - diff_;
     port_.notify();
   }
 }
 
 void GeomModel::onMouseRelease(const QPointF&) {
-  status_ = ItemStatus::Inactive;
+  active_index_ = k_non;
   diff_ = {0., 0.};
 }
 
-bool GeomModel::isItem1Touched(const QPointF& position) const {
+int GeomModel::touchedItem(const QPointF& position) const {
   if (!data_.has_value())
-    return false;
-  QPointF diff = data_->item1.center - position;
-  return std::sqrt(QPointF::dotProduct(diff, diff)) < data_->item1.radius;
+    return k_non;
+  int index = data_->items.size() - 1;
+  for (const auto& item : std::ranges::reverse_view(data_->items)) {
+    QPointF diff = item.center - position;
+    if (std::sqrt(QPointF::dotProduct(diff, diff)) < item.radius)
+      return index;
+    --index;
+  }
+  return k_non;
 }
 
 } // namespace Kernel

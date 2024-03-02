@@ -49,7 +49,7 @@ int Field::columns() const {
   return columns_;
 }
 
-const Field::Items& Field::items() const {
+const Field::FieldItems& Field::items() const {
   return items_;
 }
 

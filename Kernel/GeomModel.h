@@ -16,8 +16,6 @@ class GeomModel {
   using Observable = NSLibrary::CObservable<Data, ByReference>;
   using Observer = NSLibrary::CObserver<Data, ByReference>;
 
-  enum class ItemStatus { Active, Inactive };
-
 public:
   GeomModel();
 
@@ -29,10 +27,12 @@ private:
   void onMouseMove(const QPointF& position);
   void onMouseRelease(const QPointF& position);
 
-  bool isItem1Touched(const QPointF& position) const;
+  int touchedItem(const QPointF& position) const;
+
+  static constexpr int k_non = -1;
 
   Data data_ = DrawData{};
-  ItemStatus status_ = ItemStatus::Inactive;
+  int active_index_ = k_non;
   QPointF diff_ = {0., 0.};
   Observable port_ = [this]() -> const Data& { return data_; };
 };

@@ -72,8 +72,8 @@ void View::clear() {
 
 void View::draw(const DrawData& data) {
   plot_->detachItems();
-  addItem(data.item1);
-  addItem(data.item2);
+  for (const auto& item : data.items)
+    addItem(item);
   plot_->replot();
 }
 

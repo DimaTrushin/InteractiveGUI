@@ -24,13 +24,13 @@ private:
 };
 
 class Field {
-  using Items = std::vector<FieldItem>;
+  using FieldItems = std::vector<FieldItem>;
 
 public:
   int rows() const;
   int columns() const;
 
-  const Items& items() const;
+  const FieldItems& items() const;
   const FieldItem& item(size_t index) const;
   void moveItem(size_t index, Direction direction);
   void moveItemTo(size_t index, int row, int column);
@@ -45,7 +45,7 @@ private:
 
   int rows_ = k_default_rows;
   int columns_ = k_default_columns;
-  Items items_;
+  FieldItems items_;
 };
 
 } // namespace Kernel

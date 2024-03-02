@@ -3,6 +3,8 @@
 #include <QColor>
 #include <QPointF>
 
+#include <vector>
+
 namespace QApp {
 namespace Kernel {
 
@@ -20,8 +22,7 @@ struct DrawData {
   };
 
   FieldData field;
-  Item item1;
-  Item item2 = {.center = {1.5, 1.5}, .fill = {Qt::green}};
+  std::vector<Item> items = {{}, {.center = {1.5, 1.5}, .fill = {Qt::green}}};
 };
 
 } // namespace Kernel

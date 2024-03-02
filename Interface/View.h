@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Kernel/DrawData.h"
+#include "Kernel/MouseAction.h"
 #include "Library/Observer3/Observer.h"
-#include "MouseAction.h"
 
 #include <QObject>
 
@@ -21,6 +21,8 @@ class View : public QObject {
   using ByReference = NSLibrary::CByReference;
   using ObserverState = NSLibrary::CObserver<Data, ByReference>;
 
+  using EMouseStatus = Kernel::EMouseStatus;
+  using MouseAction = Kernel::MouseAction;
   using MouseData = std::optional<MouseAction>;
   using ObservableMouse = NSLibrary::CObservableDataMono<MouseData>;
   using ObserverMouse = NSLibrary::CObserver<MouseData>;

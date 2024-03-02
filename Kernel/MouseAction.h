@@ -3,7 +3,7 @@
 #include <QPointF>
 
 namespace QApp {
-namespace Interface {
+namespace Kernel {
 
 enum class EMouseStatus { Pressed, Moved, Released };
 
@@ -12,5 +12,5 @@ struct MouseAction {
   QPointF position;
 };
 
-} // namespace Interface
+} // namespace Kernel
 } // namespace QApp

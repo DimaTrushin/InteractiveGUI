@@ -1,6 +1,5 @@
 #include "View.h"
 
-#include <QDebug>
 #include <QPainterPath>
 #include <QPen>
 #include <qwt_picker_machine.h>
@@ -33,17 +32,14 @@ void View::subscribe(ObserverMouse* obs) {
 }
 
 void View::mousePressed(const QPointF& pos) {
-  qDebug() << "pressed pos =" << pos;
   out_port_.set(std::in_place_t(), EMouseStatus::Pressed, pos);
 }
 
 void View::mouseMoved(const QPointF& pos) {
-  qDebug() << "moved pos =" << pos;
   out_port_.set(std::in_place_t(), EMouseStatus::Moved, pos);
 }
 
 void View::mouseReleased(const QPointF& pos) {
-  qDebug() << "released pos =" << pos;
   out_port_.set(std::in_place_t(), EMouseStatus::Released, pos);
 }
 

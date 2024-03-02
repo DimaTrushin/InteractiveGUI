@@ -1,5 +1,5 @@
 #include "MouseAction.h"
 
 namespace QApp {
-namespace Interface {} // namespace Interface
+namespace Kernel {} // namespace Kernel
 } // namespace QApp

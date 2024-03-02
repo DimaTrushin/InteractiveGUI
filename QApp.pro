@@ -110,26 +110,28 @@ onetbb_copy_dll.commands = $(COPY_DIR) \
 QMAKE_POST_LINK += $${onetbb_copy_dll.commands}
 
 SOURCES += \
-  Except.cpp \
-    Interface/MainWindow.cpp \
-    Application.cpp \
-    ApplicationImpl.cpp \
-  Interface/MouseAction.cpp \
+  Interface/MainWindow.cpp \
+  Interface/PlotController.cpp \
   Interface/View.cpp \
   Kernel/DrawData.cpp \
   Kernel/GeomModel.cpp \
-    main.cpp \
+  Kernel/MouseAction.cpp \
+  Application.cpp \
+  ApplicationImpl.cpp \
+  Except.cpp \
+  main.cpp \
 
 
 HEADERS += \
-  Except.h \
-    Interface/MainWindow.h \
-    Application.h \
-    ApplicationImpl.h \
-  Interface/MouseAction.h \
+  Interface/MainWindow.h \
+  Interface/PlotController.h \
   Interface/View.h \
   Kernel/DrawData.h \
-  Kernel/GeomModel.h
+  Kernel/GeomModel.h \
+  Kernel/MouseAction.h \
+  Application.h \
+  ApplicationImpl.h \
+  Except.h \
 
 
 FORMS += \

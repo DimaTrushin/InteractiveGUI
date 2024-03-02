@@ -1,8 +1,11 @@
 #include "View.h"
 
+#include <QDebug>
 #include <QPainterPath>
 #include <QPen>
+#include <qwt_picker_machine.h>
 #include <qwt_plot.h>
+#include <qwt_plot_picker.h>
 #include <qwt_plot_shapeitem.h>
 
 #include <cassert>
@@ -11,20 +14,51 @@ namespace QApp {
 namespace Interface {
 
 View::View(QwtPlot* plot)
-    : plot_(plot),
-      port_([this](const Data& data) { drawData(data); },
-            [this](const Data& data) { drawData(data); }, Observer::doNothing) {
+    : plot_(plot), picker_(new QwtPlotPicker(plot->canvas())),
+      in_port_([this](const Data& data) { drawData(data); },
+               [this](const Data& data) { drawData(data); },
+               ObserverState::doNothing) {
   assert(plot_);
   adjustPlot(plot_);
+  setPicker(picker_);
 }
 
-View::Observer* View::port() {
-  return &port_;
+View::ObserverState* View::port() {
+  return &in_port_;
+}
+
+void View::subscribe(ObserverMouse* obs) {
+  assert(obs);
+  out_port_.subscribe(obs);
+}
+
+void View::mousePressed(const QPointF& pos) {
+  qDebug() << "pressed pos =" << pos;
+  out_port_.set(std::in_place_t(), EMouseStatus::Pressed, pos);
+}
+
+void View::mouseMoved(const QPointF& pos) {
+  qDebug() << "moved pos =" << pos;
+  out_port_.set(std::in_place_t(), EMouseStatus::Moved, pos);
+}
+
+void View::mouseReleased(const QPointF& pos) {
+  qDebug() << "released pos =" << pos;
+  out_port_.set(std::in_place_t(), EMouseStatus::Released, pos);
 }
 
 void View::adjustPlot(QwtPlot* plot) {
+  plot->setAutoDelete(true);
   plot->setAxisScale(QwtAxis::YLeft, -1, 10, 1);
   plot->setAxisScale(QwtAxis::XBottom, -1, 10, 1);
+}
+
+void View::setPicker(QwtPlotPicker* picker) {
+  picker->setStateMachine(new QwtPickerDragPointMachine);
+  QObject::connect(picker, &QwtPlotPicker::appended, this, &View::mousePressed);
+  QObject::connect(picker, &QwtPlotPicker::moved, this, &View::mouseMoved);
+  QObject::connect(picker, qOverload<const QPointF&>(&QwtPlotPicker::selected),
+                   this, &View::mouseReleased);
 }
 
 void View::drawData(const Data& data) {

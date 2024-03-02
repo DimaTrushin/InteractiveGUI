@@ -114,6 +114,7 @@ SOURCES += \
     Interface/MainWindow.cpp \
     Application.cpp \
     ApplicationImpl.cpp \
+  Interface/MouseAction.cpp \
   Interface/View.cpp \
   Kernel/DrawData.cpp \
   Kernel/GeomModel.cpp \
@@ -125,6 +126,7 @@ HEADERS += \
     Interface/MainWindow.h \
     Application.h \
     ApplicationImpl.h \
+  Interface/MouseAction.h \
   Interface/View.h \
   Kernel/DrawData.h \
   Kernel/GeomModel.h

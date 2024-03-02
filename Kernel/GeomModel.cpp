@@ -6,8 +6,8 @@ namespace QApp {
 namespace Kernel {
 
 GeomModel::GeomModel() {
-  QObject::connect(&timer_, &QTimer::timeout, this, &GeomModel::onTimer);
-  timer_.start(timeout_);
+  //  QObject::connect(&timer_, &QTimer::timeout, this, &GeomModel::onTimer);
+  //  timer_.start(timeout_);
 }
 
 void GeomModel::subscribe(Observer* obs) {

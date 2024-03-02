@@ -25,11 +25,11 @@ private Q_SLOTS:
   void onTimer();
 
 private:
-  static constexpr std::chrono::seconds k_default_timeout =
-      std::chrono::seconds(1);
+  //  static constexpr std::chrono::seconds k_default_timeout =
+  //      std::chrono::seconds(1);
 
-  std::chrono::seconds timeout_ = k_default_timeout;
-  QTimer timer_;
+  //  std::chrono::seconds timeout_ = k_default_timeout;
+  //  QTimer timer_;
   Data data_ = DrawData{};
   Observable port_ = [this]() -> const std::optional<DrawData>& {
     return data_;

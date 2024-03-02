@@ -41,6 +41,8 @@ macx {
  }
 }
 
+INCLUDEPATH += modules
+
 
 # This code chooses the conanfile and then run conan on it.
 # If you use this, you do not need to specify the conan install step.
@@ -112,6 +114,8 @@ SOURCES += \
     Interface/MainWindow.cpp \
     Application.cpp \
     ApplicationImpl.cpp \
+  Kernel/DrawData.cpp \
+  Kernel/GeomModel.cpp \
     main.cpp \
 
 
@@ -120,6 +124,8 @@ HEADERS += \
     Interface/MainWindow.h \
     Application.h \
     ApplicationImpl.h \
+  Kernel/DrawData.h \
+  Kernel/GeomModel.h
 
 
 FORMS += \

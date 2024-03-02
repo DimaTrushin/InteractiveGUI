@@ -114,6 +114,7 @@ SOURCES += \
   Interface/PlotController.cpp \
   Interface/View.cpp \
   Kernel/DrawData.cpp \
+  Kernel/Field.cpp \
   Kernel/GeomModel.cpp \
   Kernel/MouseAction.cpp \
   Application.cpp \
@@ -127,6 +128,7 @@ HEADERS += \
   Interface/PlotController.h \
   Interface/View.h \
   Kernel/DrawData.h \
+  Kernel/Field.h \
   Kernel/GeomModel.h \
   Kernel/MouseAction.h \
   Application.h \

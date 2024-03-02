@@ -46,8 +46,13 @@ private:
   void drawData(const Data& data);
   void clear();
   void draw(const DrawData& data);
-  void drawField(const FieldData& field);
   void addItem(const DrawData::Item& item);
+  void drawField(const FieldData& field);
+  static QVector<QPointF> makeVerticalPath(const FieldData& field);
+  static QVector<QPointF> makeHorizontalPath(const FieldData& field);
+  void addPathToPlot(const FieldData& field, QVector<QPointF>&& path);
+  void drawVerticalLines(const FieldData& field);
+  void drawHorizontalLines(const FieldData& field);
 
   QwtPlot* plot_;
   QwtPlotPicker* picker_;

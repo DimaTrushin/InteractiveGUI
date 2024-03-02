@@ -22,6 +22,8 @@ public:
   MainWindow();
   ~MainWindow();
 
+  QwtPlot* plot();
+
 private:
   std::unique_ptr<Ui::MainWindow> ui_;
   std::unique_ptr<QwtPlot> plot_;

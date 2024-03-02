@@ -18,8 +18,8 @@ void GeomModel::subscribe(Observer* obs) {
 void GeomModel::onTimer() {
   static int dx = 0;
   static int dy = 0;
-  data_->item1.center += QPointF(dx % 10, dy % 10);
-  data_->item2.center += QPointF(dx % 5, dy % 7);
+  data_->item1.center = QPointF(dx % 10, dy % 10);
+  data_->item2.center = QPointF(dx % 5, dy % 7);
   ++dx;
   ++dy;
   port_.notify();

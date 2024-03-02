@@ -17,6 +17,10 @@ MainWindow::MainWindow()
   plot_->setAxisVisible(QwtAxis::XBottom, false);
 }
 
+QwtPlot* MainWindow::plot() {
+  return plot_.get();
+}
+
 MainWindow::~MainWindow() = default;
 } // namespace Interface
 } // namespace QApp

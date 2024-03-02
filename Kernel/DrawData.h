@@ -15,12 +15,13 @@ struct DrawData {
   struct Item {
     QPointF center = {0.5, 0.5};
     double radius = 0.4;
-    QColor color = Qt::red;
+    QColor fill = Qt::red;
+    QColor countur = Qt::blue;
   };
 
   FieldData field;
   Item item1;
-  Item item2 = {.center = {1.5, 1.5}, .color = {Qt::green}};
+  Item item2 = {.center = {1.5, 1.5}, .fill = {Qt::green}};
 };
 
 } // namespace Kernel

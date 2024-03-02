@@ -12,10 +12,10 @@ namespace Kernel {
 
 class GeomModel : public QObject {
   Q_OBJECT
-  using Observable =
-      NSLibrary::CObservable<std::optional<DrawData>, NSLibrary::CByReference>;
-  using Observer =
-      NSLibrary::CObserver<std::optional<DrawData>, NSLibrary::CByReference>;
+  using ByReference = NSLibrary::CByReference;
+  using Data = std::optional<DrawData>;
+  using Observable = NSLibrary::CObservable<Data, ByReference>;
+  using Observer = NSLibrary::CObserver<Data, ByReference>;
 
 public:
   GeomModel();
@@ -30,7 +30,7 @@ private:
 
   std::chrono::seconds timeout_ = k_default_timeout;
   QTimer timer_;
-  std::optional<DrawData> data_;
+  Data data_ = DrawData{};
   Observable port_ = [this]() -> const std::optional<DrawData>& {
     return data_;
   };

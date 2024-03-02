@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17 no_keywords warn_on
+CONFIG += c++2a no_keywords warn_on
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -114,6 +114,7 @@ SOURCES += \
     Interface/MainWindow.cpp \
     Application.cpp \
     ApplicationImpl.cpp \
+  Interface/View.cpp \
   Kernel/DrawData.cpp \
   Kernel/GeomModel.cpp \
     main.cpp \
@@ -124,6 +125,7 @@ HEADERS += \
     Interface/MainWindow.h \
     Application.h \
     ApplicationImpl.h \
+  Interface/View.h \
   Kernel/DrawData.h \
   Kernel/GeomModel.h
 

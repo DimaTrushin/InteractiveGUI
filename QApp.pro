@@ -40,6 +40,34 @@ macx {
  macx-clang*{
  }
 }
+
+
+# This code chooses the conanfile and then run conan on it.
+# If you use this, you do not need to specify the conan install step.
+# But you have to run the qmake twice!
+
+# This copies the conan file of choice.
+#QMAKE_EXTRA_TARGETS += copy_conanfile
+#CONAN_FILE_PATH = $$PWD/conan
+#CONAN_FILE_PATH = $$CONAN_FILE_PATH/static
+#copy_conanfile.target = conanfile
+#copy_conanfile.commands = $(COPY_FILE) \
+#                          $$shell_path($$CONAN_FILE_PATH/conanfile.txt) \
+#                          $$shell_path($$PWD)
+#PRE_TARGETDEPS += conanfile
+
+
+#CONFIG(debug, debug|release) {
+#    CONAN_BUILD_TYPE = Debug
+#} else {
+#    CONAN_BUILD_TYPE = Release
+#}
+#QMAKE_EXTRA_TARGETS += conan_install
+#conan_install.target = conan_install
+#conan_install.commands = conan install "-if $$OUT_PWD" "-s build_type=$$CONAN_BUILD_TYPE" "--build=missing" $$PWD/conanfile.txt
+#PRE_TARGETDEPS += conan_install
+
+
 #CONFIG += conan_basic_setup
 include($${OUT_PWD}/conanbuildinfo.pri)
 
@@ -47,6 +75,16 @@ include($${OUT_PWD}/conanbuildinfo.pri)
 DEFINES += $$CONAN_DEFINES_QWT
 INCLUDEPATH += $$CONAN_INCLUDEPATH_QWT
 LIBS += $$CONAN_LIBDIRS_QWT $$CONAN_LIBS_QWT
+#LIBS += -L$$CONAN_BINDIRS_QWT
+
+# this copies the required files, but it seems like dll is incompatible
+# should find out how to set the correct build settings of qwt with conan
+#QMAKE_EXTRA_TARGETS += qwt_copy_dll
+#qwt_copy_dll.target = qwt_dll
+#qwt_copy_dll.commands = $(COPY_DIR) \
+#                          $$shell_path($$CONAN_BINDIRS_QWT) \
+#                          $$shell_path($$OUT_PWD)
+#QMAKE_POST_LINK += $${qwt_copy_dll.commands}
 
 #OneApi TBB
 DEFINES += $$CONAN_DEFINES_ONETBB
@@ -54,8 +92,20 @@ INCLUDEPATH += $$CONAN_INCLUDEPATH_ONETBB
 LIBS += $$CONAN_LIBDIRS_ONETBB $$CONAN_LIBS_ONETBB
 # this path contains required dlls and is added to the run environment by QtCreator
 # make sure to check Run option "Add build library search path to Path"
-LIBS += -L$$CONAN_BINDIRS_ONETBB
+#LIBS += -L$$CONAN_BINDIRS_ONETBB
 
+# this copies onetbb dlls to the target executable directory
+CONFIG(debug, debug|release) {
+    BUILD_TYPE = debug
+} else {
+    BUILD_TYPE = release
+}
+QMAKE_EXTRA_TARGETS += onetbb_copy_dll
+onetbb_copy_dll.target = onetbb_dll
+onetbb_copy_dll.commands = $(COPY_DIR) \
+                          $$shell_path($$CONAN_BINDIRS_ONETBB) \
+                          $$shell_path($$OUT_PWD/$$BUILD_TYPE)
+QMAKE_POST_LINK += $${onetbb_copy_dll.commands}
 
 SOURCES += \
   Except.cpp \

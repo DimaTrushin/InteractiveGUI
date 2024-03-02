@@ -14,7 +14,7 @@ GeomModel::GeomModel()
                ObserverField::doNothing) {
 }
 
-void GeomModel::subscribe(Observer* obs) {
+void GeomModel::subscribeToDrawData(Observer* obs) {
   assert(obs);
   port_.subscribe(obs);
 }
@@ -40,6 +40,11 @@ GeomModel::ObserverField* GeomModel::port() {
   return &in_port_;
 }
 
+void GeomModel::subscribeToItemAction(ObserverAction* obs) {
+  assert(obs);
+  action_port_.subscribe(obs);
+}
+
 void GeomModel::onMousePress(const QPointF& position) {
   int index = touchedItem(position);
   if (index != k_non) {
@@ -56,9 +61,15 @@ void GeomModel::onMouseMove(const QPointF& position) {
   }
 }
 
-void GeomModel::onMouseRelease(const QPointF&) {
-  active_index_ = k_non;
+void GeomModel::onMouseRelease(const QPointF& position) {
+  if (active_index_ == k_non)
+    return;
+  assert(data_.has_value());
   diff_ = {0., 0.};
+  size_t index = std::exchange(active_index_, k_non);
+  int row = getRow(position);
+  int column = getColumn(position);
+  action_port_.set(std::in_place_t(), index, row, column);
 }
 
 int GeomModel::touchedItem(const QPointF& position) const {
@@ -74,6 +85,17 @@ int GeomModel::touchedItem(const QPointF& position) const {
   return k_non;
 }
 
+int GeomModel::getRow(const QPointF& position) const {
+  assert(data_.has_value());
+  const DrawData::FieldData& field = data_->field;
+  return std::floor((position.x() - field.origin.x()) / field.width);
+}
+
+int GeomModel::getColumn(const QPointF& position) const {
+  const DrawData::FieldData& field = data_->field;
+  return std::floor((position.y() - field.origin.y()) / field.hight);
+}
+
 void GeomModel::onFieldData(FieldDataArg data) {
   if (!data.has_value()) {
     if (data_.has_value()) {
@@ -82,6 +104,7 @@ void GeomModel::onFieldData(FieldDataArg data) {
     }
     return;
   }
+
   const Field& field = *data;
   if (!data_.has_value())
     data_.emplace();
@@ -89,6 +112,8 @@ void GeomModel::onFieldData(FieldDataArg data) {
   data_->field.columns = field.columns();
   data_->field.hight = k_hight;
   data_->field.width = k_width;
+
+  data_->items.clear();
   data_->items.reserve(field.items().size());
   for (const auto& item : field.items()) {
     using DrawItem = DrawData::Item;

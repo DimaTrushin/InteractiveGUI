@@ -115,8 +115,10 @@ SOURCES += \
   Interface/View.cpp \
   Kernel/DrawData.cpp \
   Kernel/Field.cpp \
+  Kernel/FieldController.cpp \
   Kernel/FieldModel.cpp \
   Kernel/GeomModel.cpp \
+  Kernel/ItemAction.cpp \
   Kernel/MouseAction.cpp \
   Application.cpp \
   ApplicationImpl.cpp \
@@ -130,8 +132,10 @@ HEADERS += \
   Interface/View.h \
   Kernel/DrawData.h \
   Kernel/Field.h \
+  Kernel/FieldController.h \
   Kernel/FieldModel.h \
   Kernel/GeomModel.h \
+  Kernel/ItemAction.h \
   Kernel/MouseAction.h \
   Application.h \
   ApplicationImpl.h \

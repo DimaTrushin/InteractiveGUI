@@ -2,6 +2,7 @@
 
 #include "DrawData.h"
 #include "Field.h"
+#include "ItemAction.h"
 #include "Library/Observer3/Observer.h"
 #include "MouseAction.h"
 
@@ -21,12 +22,18 @@ class GeomModel {
   using ObserverField = NSLibrary::CObserver<FieldData>;
   using FieldDataArg = ObserverField::CArg;
 
+  using ItemData = std::optional<ItemAction>;
+  using ObservableAction = NSLibrary::CObservableDataMono<ItemData>;
+  using ObserverAction = NSLibrary::CObserver<ItemData>;
+  using ItemDataSent = ObserverAction::CArg;
+
 public:
   GeomModel();
 
-  void subscribe(Observer* obs);
+  void subscribeToDrawData(Observer* obs);
   void onMouseAction(const MouseAction& action);
   ObserverField* port();
+  void subscribeToItemAction(ObserverAction* obs);
 
 private:
   void onMousePress(const QPointF& position);
@@ -34,6 +41,8 @@ private:
   void onMouseRelease(const QPointF& position);
 
   int touchedItem(const QPointF& position) const;
+  int getRow(const QPointF& position) const;
+  int getColumn(const QPointF& position) const;
 
   void onFieldData(FieldDataArg data);
 
@@ -46,6 +55,7 @@ private:
   QPointF diff_ = {0., 0.};
   Observable port_ = [this]() -> const Data& { return data_; };
   ObserverField in_port_;
+  ObservableAction action_port_;
 };
 
 } // namespace Kernel

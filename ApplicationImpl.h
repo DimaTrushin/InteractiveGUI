@@ -4,6 +4,7 @@
 
 #include "Interface/PlotController.h"
 #include "Interface/View.h"
+#include "Kernel/FieldController.h"
 #include "Kernel/FieldModel.h"
 #include "Kernel/GeomModel.h"
 
@@ -15,6 +16,7 @@ class ApplicationImpl {
   using GeomModel = Kernel::GeomModel;
   using View = Interface::View;
   using PlotController = Interface::PlotController;
+  using FieldController = Kernel::FieldController;
 
 public:
   ApplicationImpl();
@@ -25,6 +27,7 @@ private:
   GeomModel geom_model_;
   View view_;
   PlotController controller_;
+  FieldController field_controller_;
 };
 
 } // namespace QApp

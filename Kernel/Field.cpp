@@ -65,7 +65,8 @@ const FieldItem& Field::item(size_t index) const {
 }
 
 void Field::moveItem(size_t index, Direction direction) {
-  assert(index < items_.size());
+  if (index >= items_.size())
+    return;
   switch (direction) {
   case Direction::Up:
     if (items_[index].row() >= rows_)
@@ -90,6 +91,8 @@ void Field::moveItem(size_t index, Direction direction) {
 }
 
 void Field::moveItemTo(size_t index, int row, int column) {
+  if (index >= items_.size())
+    return;
   if (!isAccessible(index, row, column))
     return;
   items_[index].moveTo(row, column);

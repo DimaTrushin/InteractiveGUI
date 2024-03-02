@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Field.h"
+#include "ItemAction.h"
 #include "Library/Observer3/Observer.h"
 
 #include <optional>
@@ -18,6 +19,7 @@ public:
   FieldModel();
 
   void subscribe(ObserverField* obs);
+  void makeMove(const ItemAction& action);
 
 private:
   FieldData field_;

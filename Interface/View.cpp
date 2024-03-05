@@ -63,8 +63,6 @@ void View::mouseReleased(const QPointF& pos) {
 
 void View::adjustPlot(QwtPlot* plot) {
   plot->setAutoDelete(true);
-  plot->setAxisScale(QwtAxis::YLeft, -1, 10, 1);
-  plot->setAxisScale(QwtAxis::XBottom, -1, 10, 1);
 }
 
 void View::setPicker(QwtPlotPicker* picker) {
@@ -114,8 +112,10 @@ void View::addItem(const DrawData::Item& item) {
 }
 
 void View::drawField(const FieldData& field) {
-  plot_->setAxisScale(QwtAxis::YLeft, -1, field.rows + 1, 1);
-  plot_->setAxisScale(QwtAxis::XBottom, -1, field.columns + 1, 1);
+  plot_->setAxisScale(QwtAxis::YLeft, -field.hight,
+                      (field.rows + 1) * field.hight, 1);
+  plot_->setAxisScale(QwtAxis::XBottom, -field.width,
+                      (field.columns + 1) * field.width, 1);
   drawVerticalLines(field);
   drawHorizontalLines(field);
 }

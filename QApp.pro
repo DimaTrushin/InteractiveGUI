@@ -110,6 +110,8 @@ onetbb_copy_dll.commands = $(COPY_DIR) \
 QMAKE_POST_LINK += $${onetbb_copy_dll.commands}
 
 SOURCES += \
+  ApplicationGUI.cpp \
+  ApplicationKernel.cpp \
   Interface/MainWindow.cpp \
   Interface/PlotController.cpp \
   Interface/View.cpp \
@@ -127,6 +129,8 @@ SOURCES += \
 
 
 HEADERS += \
+  ApplicationGUI.h \
+  ApplicationKernel.h \
   Interface/MainWindow.h \
   Interface/PlotController.h \
   Interface/View.h \

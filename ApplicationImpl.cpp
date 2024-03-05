@@ -3,9 +3,7 @@
 namespace QApp {
 
 ApplicationImpl::ApplicationImpl()
-    : view_(main_window_.plot()), controller_(&geom_model_),
-      field_controller_(&model_) {
-  main_window_.show();
+    : controller_(&geom_model_), field_controller_(&model_) {
   model_.subscribe(geom_model_.port());
   geom_model_.subscribeToDrawData(view_.port());
   view_.subscribe(controller_.port());

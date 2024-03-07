@@ -130,7 +130,7 @@ void View::drawField(const FieldData& field) {
 
 QVector<QPointF> View::makeVerticalPath(const FieldData& field) {
   QPointF point = field.origin;
-  QPointF vertical = QPointF(point.x(), field.rows * field.hight) - point;
+  QPointF vertical = QPointF(0., field.rows * field.hight);
   QPointF horizontal = QPointF(field.width, 0.);
   QVector<QPointF> path;
   path.push_back(point);
@@ -149,7 +149,7 @@ QVector<QPointF> View::makeVerticalPath(const FieldData& field) {
 QVector<QPointF> View::makeHorizontalPath(const FieldData& field) {
   QPointF point = field.origin;
   QPointF vertical = QPointF(0., field.hight);
-  QPointF horizontal = QPointF(field.columns * field.hight, point.y()) - point;
+  QPointF horizontal = QPointF(field.columns * field.width, 0.);
   QVector<QPointF> path;
   path.push_back(point);
   for (int index = 0; index < field.rows; ++index) {

@@ -86,12 +86,12 @@ int GeomModel::touchedItem(const QPointF& position) const {
 int GeomModel::getRow(const QPointF& position) const {
   assert(data_.has_value());
   const DrawData::FieldData& field = data_->field;
-  return std::floor((position.x() - field.origin.x()) / field.width);
+  return std::floor((position.y() - field.origin.y()) / field.hight);
 }
 
 int GeomModel::getColumn(const QPointF& position) const {
   const DrawData::FieldData& field = data_->field;
-  return std::floor((position.y() - field.origin.y()) / field.hight);
+  return std::floor((position.x() - field.origin.x()) / field.width);
 }
 
 void GeomModel::onFieldData(FieldData&& data) {
@@ -116,7 +116,8 @@ void GeomModel::onFieldData(FieldData&& data) {
   for (const auto& item : field.items()) {
     using DrawItem = DrawData::Item;
     data_->items.emplace_back(
-        DrawItem{.center = {0.5 + item.row(), 0.5 + item.column()}});
+        DrawItem{.center = {(0.5 + item.column()) * data_->field.width,
+                            (0.5 + item.row()) * data_->field.hight}});
   }
   port_.notify();
 }

@@ -115,13 +115,10 @@ SOURCES += \
   Interface/MainWindow.cpp \
   Interface/PlotController.cpp \
   Interface/View.cpp \
-  Kernel/DrawData.cpp \
   Kernel/Field.cpp \
   Kernel/FieldController.cpp \
   Kernel/FieldModel.cpp \
   Kernel/GeomModel.cpp \
-  Kernel/ItemAction.cpp \
-  Kernel/MouseAction.cpp \
   Application.cpp \
   ApplicationImpl.cpp \
   Except.cpp \

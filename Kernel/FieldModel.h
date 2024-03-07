@@ -2,7 +2,7 @@
 
 #include "Field.h"
 #include "ItemAction.h"
-#include "Library/Observer3/Observer.h"
+#include "QObserver.h"
 
 #include <optional>
 
@@ -11,9 +11,8 @@ namespace Kernel {
 
 class FieldModel {
   using FieldData = std::optional<Field>;
-  using ObservableField = NSLibrary::CObservable<FieldData>;
-  using ObserverField = NSLibrary::CObserver<FieldData>;
-  using FieldDataArg = ObserverField::CArg;
+  using ObservableField = Library::CObservable<FieldData>;
+  using ObserverField = Library::CObserver<FieldData>;
 
 public:
   FieldModel();
@@ -23,7 +22,7 @@ public:
 
 private:
   FieldData field_;
-  ObservableField port_ = [this]() -> FieldDataArg { return field_; };
+  ObservableField port_ = [this]() -> const FieldData& { return field_; };
 };
 
 } // namespace Kernel

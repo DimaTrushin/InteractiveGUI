@@ -32,9 +32,7 @@ private:
 
 View::View(QwtPlot* plot)
     : plot_(plot), picker_(new QwtPlotPicker(plot->canvas())),
-      in_port_([this](const Data& data) { drawData(data); },
-               [this](const Data& data) { drawData(data); },
-               ObserverState::doNothing) {
+      in_port_([this](Data&& data) { drawData(std::move(data)); }) {
   assert(plot_);
   adjustPlot(plot_);
   setPicker(picker_);
@@ -73,7 +71,7 @@ void View::setPicker(QwtPlotPicker* picker) {
                    this, &View::mouseReleased);
 }
 
-void View::drawData(const Data& data) {
+void View::drawData(Data&& data) {
   if (data.has_value()) {
     draw(*data);
   } else {

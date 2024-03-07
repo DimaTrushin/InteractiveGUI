@@ -1,10 +1,9 @@
 #include "Application.h"
 #include "Except.h"
-
-#include <QApplication>
+#include "QRunTime.h"
 
 int main(int argc, char* argv[]) {
-  QApplication runtime(argc, argv);
+  QApp::QRunTime runtime(argc, argv);
   try {
     QApp::Application app;
     runtime.exec();

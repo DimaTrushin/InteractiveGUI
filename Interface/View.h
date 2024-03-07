@@ -2,7 +2,7 @@
 
 #include "Kernel/DrawData.h"
 #include "Kernel/MouseAction.h"
-#include "Library/Observer3/Observer.h"
+#include "QObserver.h"
 
 #include <QObject>
 
@@ -19,14 +19,13 @@ class View : public QObject {
   using DrawData = Kernel::DrawData;
   using FieldData = DrawData::FieldData;
   using Data = std::optional<DrawData>;
-  using ByReference = NSLibrary::CByReference;
-  using ObserverState = NSLibrary::CObserver<Data, ByReference>;
+  using ObserverState = Library::CObserver<Data>;
 
   using EMouseStatus = Kernel::EMouseStatus;
   using MouseAction = Kernel::MouseAction;
   using MouseData = std::optional<MouseAction>;
-  using ObservableMouse = NSLibrary::CObservableDataMono<MouseData>;
-  using ObserverMouse = NSLibrary::CObserver<MouseData>;
+  using ObservableMouse = Library::CObservableDataMono<MouseData>;
+  using ObserverMouse = Library::CObserver<MouseData>;
 
 public:
   View(QwtPlot* plot);
@@ -43,7 +42,7 @@ private:
   static void adjustPlot(QwtPlot*);
   void setPicker(QwtPlotPicker*);
 
-  void drawData(const Data& data);
+  void drawData(Data&& data);
   void clear();
   void draw(const DrawData& data);
   void addItem(const DrawData::Item& item);

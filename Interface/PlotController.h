@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kernel/MouseAction.h"
-#include "Library/Observer3/Observer.h"
+#include "QObserver.h"
 
 #include <optional>
 
@@ -17,8 +17,7 @@ class PlotController {
   using EMouseStatus = Kernel::EMouseStatus;
   using MouseAction = Kernel::MouseAction;
   using MouseData = std::optional<MouseAction>;
-  using Observer = NSLibrary::CObserver<MouseData>;
-  using MouseDataArg = Observer::CArg;
+  using Observer = Library::CObserver<MouseData>;
 
 public:
   PlotController(GeomModel* host);
@@ -26,7 +25,7 @@ public:
   Observer* port();
 
 private:
-  void control(MouseDataArg data);
+  void control(MouseData&& data);
   void controlOnData(const MouseAction& action);
 
   GeomModel* host_;

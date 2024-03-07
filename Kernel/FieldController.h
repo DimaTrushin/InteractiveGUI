@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ItemAction.h"
-#include "Library/Observer3/Observer.h"
+#include "QObserver.h"
 
 #include <optional>
 
@@ -12,15 +12,14 @@ class FieldModel;
 
 class FieldController {
   using ItemData = std::optional<ItemAction>;
-  using Observer = NSLibrary::CObserver<ItemData>;
-  using ItemDataArg = Observer::CArg;
+  using Observer = Library::CObserver<ItemData>;
 
 public:
   FieldController(FieldModel* model);
   Observer* port();
 
 private:
-  void onItemData(ItemDataArg data);
+  void onItemData(ItemData&& data);
   void onItemAction(ItemAction action);
 
   FieldModel* host_;

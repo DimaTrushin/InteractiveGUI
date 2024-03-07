@@ -9,9 +9,7 @@ namespace QApp {
 namespace Kernel {
 
 GeomModel::GeomModel()
-    : in_port_([this](FieldDataArg data) { onFieldData(data); },
-               [this](FieldDataArg data) { onFieldData(data); },
-               ObserverField::doNothing) {
+    : in_port_([this](FieldData&& data) { onFieldData(std::move(data)); }) {
 }
 
 void GeomModel::subscribeToDrawData(Observer* obs) {
@@ -96,7 +94,7 @@ int GeomModel::getColumn(const QPointF& position) const {
   return std::floor((position.y() - field.origin.y()) / field.hight);
 }
 
-void GeomModel::onFieldData(FieldDataArg data) {
+void GeomModel::onFieldData(FieldData&& data) {
   if (!data.has_value()) {
     if (data_.has_value()) {
       data_.reset();

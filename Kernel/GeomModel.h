@@ -3,8 +3,8 @@
 #include "DrawData.h"
 #include "Field.h"
 #include "ItemAction.h"
-#include "Library/Observer3/Observer.h"
 #include "MouseAction.h"
+#include "QObserver.h"
 
 #include <optional>
 
@@ -13,19 +13,16 @@ namespace Kernel {
 
 class GeomModel {
 
-  using ByReference = NSLibrary::CByReference;
   using Data = std::optional<DrawData>;
-  using Observable = NSLibrary::CObservable<Data, ByReference>;
-  using Observer = NSLibrary::CObserver<Data, ByReference>;
+  using Observable = Library::CObservable<Data>;
+  using Observer = Library::CObserver<Data>;
 
   using FieldData = std::optional<Field>;
-  using ObserverField = NSLibrary::CObserver<FieldData>;
-  using FieldDataArg = ObserverField::CArg;
+  using ObserverField = Library::CObserver<FieldData>;
 
   using ItemData = std::optional<ItemAction>;
-  using ObservableAction = NSLibrary::CObservableDataMono<ItemData>;
-  using ObserverAction = NSLibrary::CObserver<ItemData>;
-  using ItemDataSent = ObserverAction::CArg;
+  using ObservableAction = Library::CObservableDataMono<ItemData>;
+  using ObserverAction = Library::CObserver<ItemData>;
 
 public:
   GeomModel();
@@ -44,7 +41,7 @@ private:
   int getRow(const QPointF& position) const;
   int getColumn(const QPointF& position) const;
 
-  void onFieldData(FieldDataArg data);
+  void onFieldData(FieldData&& data);
 
   static constexpr int k_non = -1;
   static constexpr double k_hight = 1.;

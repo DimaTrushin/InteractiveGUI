@@ -41,7 +41,7 @@ macx {
  }
 }
 
-INCLUDEPATH += modules
+#INCLUDEPATH += modules
 
 
 # This code chooses the conanfile and then run conan on it.
@@ -125,6 +125,8 @@ SOURCES += \
   Application.cpp \
   ApplicationImpl.cpp \
   Except.cpp \
+  QPorts.cpp \
+  QRunTime.cpp \
   main.cpp \
 
 
@@ -144,6 +146,9 @@ HEADERS += \
   Application.h \
   ApplicationImpl.h \
   Except.h \
+  QObserver.h \
+  QPorts.h \
+  QRunTime.h
 
 
 FORMS += \

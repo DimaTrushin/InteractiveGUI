@@ -48,6 +48,8 @@ private:
   static constexpr double k_width = 1.;
   static constexpr double k_item_radius = 0.4;
   static constexpr QPointF k_origin = {0., 0.};
+  static constexpr Qt::GlobalColor k_fill = Qt::red;
+  static constexpr Qt::GlobalColor k_countur = Qt::blue;
 
   Data data_;
   int active_index_ = k_non;

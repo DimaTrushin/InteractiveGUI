@@ -120,7 +120,9 @@ void GeomModel::onFieldData(FieldData&& data) {
         DrawItem{.center = QPointF{(0.5 + item.column()) * data_->field.width,
                                    (0.5 + item.row()) * data_->field.hight} +
                            data_->field.origin,
-                 .radius = k_item_radius});
+                 .radius = k_item_radius,
+                 .fill = k_fill,
+                 .countur = k_countur});
   }
   port_.notify();
 }

@@ -19,8 +19,8 @@ struct DrawData {
   struct Item {
     QPointF center;
     double radius;
-    QColor fill = Qt::red;
-    QColor countur = Qt::blue;
+    QColor fill;
+    QColor countur;
   };
 
   FieldData field;

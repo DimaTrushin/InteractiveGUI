@@ -120,10 +120,10 @@ void View::addItem(const DrawData::Item& item) {
 }
 
 void View::drawField(const FieldData& field) {
-  plot_->setAxisScale(QwtAxis::YLeft, -field.hight,
-                      (field.rows + 1) * field.hight, 1);
-  plot_->setAxisScale(QwtAxis::XBottom, -field.width,
-                      (field.columns + 1) * field.width, 1);
+  plot_->setAxisScale(QwtAxis::YLeft, field.origin.y() - field.hight,
+                      field.origin.y() + (field.rows + 1) * field.hight, 1);
+  plot_->setAxisScale(QwtAxis::XBottom, field.origin.x() - field.width,
+                      field.origin.x() + (field.columns + 1) * field.width, 1);
   drawVerticalLines(field);
   drawHorizontalLines(field);
 }

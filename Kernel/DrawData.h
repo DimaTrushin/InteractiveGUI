@@ -14,8 +14,7 @@ struct DrawData {
     int columns;
     double hight;
     double width;
-    // need to fix the origin
-    QPointF origin = {0., 0.};
+    QPointF origin;
   };
   struct Item {
     QPointF center;

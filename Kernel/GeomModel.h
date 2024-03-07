@@ -47,6 +47,7 @@ private:
   static constexpr double k_hight = 1.;
   static constexpr double k_width = 1.;
   static constexpr double k_item_radius = 0.4;
+  static constexpr QPointF k_origin = {0., 0.};
 
   Data data_;
   int active_index_ = k_non;

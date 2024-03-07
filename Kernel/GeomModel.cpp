@@ -110,14 +110,16 @@ void GeomModel::onFieldData(FieldData&& data) {
   data_->field.columns = field.columns();
   data_->field.hight = k_hight;
   data_->field.width = k_width;
+  data_->field.origin = k_origin;
 
   data_->items.clear();
   data_->items.reserve(field.items().size());
   for (const auto& item : field.items()) {
     using DrawItem = DrawData::Item;
     data_->items.emplace_back(
-        DrawItem{.center = {(0.5 + item.column()) * data_->field.width,
-                            (0.5 + item.row()) * data_->field.hight},
+        DrawItem{.center = QPointF{(0.5 + item.column()) * data_->field.width,
+                                   (0.5 + item.row()) * data_->field.hight} +
+                           data_->field.origin,
                  .radius = k_item_radius});
   }
   port_.notify();

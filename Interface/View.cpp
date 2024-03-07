@@ -30,13 +30,16 @@ private:
 
 } // namespace
 
-View::View(QwtPlot* plot)
-    : plot_(plot), picker_(new QwtPlotPicker(plot->canvas())),
+View::View()
+    : plot_(std::make_unique<QwtPlot>()),
+      picker_(new QwtPlotPicker(plot_->canvas())),
       in_port_([this](Data&& data) { drawData(std::move(data)); }) {
   assert(plot_);
-  adjustPlot(plot_);
+  adjustPlot(plot_.get());
   setPicker(picker_);
 }
+
+View::~View() = default;
 
 View::ObserverState* View::port() {
   return &in_port_;
@@ -45,6 +48,10 @@ View::ObserverState* View::port() {
 void View::subscribe(ObserverMouse* obs) {
   assert(obs);
   out_port_.subscribe(obs);
+}
+
+QwtPlot* View::plot() {
+  return plot_.get();
 }
 
 void View::mousePressed(const QPointF& pos) {
@@ -61,6 +68,9 @@ void View::mouseReleased(const QPointF& pos) {
 
 void View::adjustPlot(QwtPlot* plot) {
   plot->setAutoDelete(true);
+  plot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  plot->setAxisVisible(QwtAxis::YLeft, false);
+  plot->setAxisVisible(QwtAxis::XBottom, false);
 }
 
 void View::setPicker(QwtPlotPicker* picker) {
@@ -106,7 +116,7 @@ void View::addItem(const DrawData::Item& item) {
   QBrush brush(item.fill);
   plot_item->setBrush(brush);
 
-  plot_item.release()->attach(plot_);
+  plot_item.release()->attach(plot_.get());
 }
 
 void View::drawField(const FieldData& field) {
@@ -163,7 +173,7 @@ void View::addPathToPlot(const FieldData& field, QVector<QPointF>&& path) {
       std::make_unique<SeriesQPointF>(origin, corner);
   points->setSamples(path);
   curve->setSamples(points.release());
-  curve.release()->attach(plot_);
+  curve.release()->attach(plot_.get());
 }
 
 void View::drawVerticalLines(const FieldData& field) {

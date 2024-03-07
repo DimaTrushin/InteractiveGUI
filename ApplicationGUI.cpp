@@ -2,8 +2,12 @@
 
 namespace QApp {
 
-ApplicationGUI::ApplicationGUI() : view_(main_window_.plot()) {
-  main_window_.show();
+ApplicationGUI::MainWindow* ApplicationGUI::mainWindow() {
+  return &main_window_;
+}
+
+ApplicationGUI::View* ApplicationGUI::view() {
+  return main_window_.view();
 }
 
 } // namespace QApp

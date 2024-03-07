@@ -11,11 +11,12 @@ class ApplicationGUI {
   using View = Interface::View;
 
 public:
-  ApplicationGUI();
-
 protected:
+  MainWindow* mainWindow();
+  View* view();
+
+private:
   MainWindow main_window_;
-  View view_;
 };
 
 } // namespace QApp

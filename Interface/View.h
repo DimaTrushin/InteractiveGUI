@@ -6,6 +6,7 @@
 
 #include <QObject>
 
+#include <memory>
 #include <optional>
 
 class QwtPlot;
@@ -28,10 +29,13 @@ class View : public QObject {
   using ObserverMouse = Library::CObserver<MouseData>;
 
 public:
-  View(QwtPlot* plot);
-  ObserverState* port();
+  View();
+  ~View();
 
+  ObserverState* port();
   void subscribe(ObserverMouse* obs);
+
+  QwtPlot* plot();
 
 private Q_SLOTS:
   void mousePressed(const QPointF& pos);
@@ -53,7 +57,7 @@ private:
   void drawVerticalLines(const FieldData& field);
   void drawHorizontalLines(const FieldData& field);
 
-  QwtPlot* plot_;
+  std::unique_ptr<QwtPlot> plot_;
   QwtPlotPicker* picker_;
   ObserverState in_port_;
   ObservableMouse out_port_;

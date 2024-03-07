@@ -46,6 +46,7 @@ private:
   static constexpr int k_non = -1;
   static constexpr double k_hight = 1.;
   static constexpr double k_width = 1.;
+  static constexpr double k_item_radius = 0.4;
 
   Data data_;
   int active_index_ = k_non;

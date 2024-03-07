@@ -12,13 +12,14 @@ struct DrawData {
   struct FieldData {
     int rows;
     int columns;
-    double hight = 1.;
-    double width = 1.;
+    double hight;
+    double width;
+    // need to fix the origin
     QPointF origin = {0., 0.};
   };
   struct Item {
-    QPointF center = {0.5, 0.5};
-    double radius = 0.4;
+    QPointF center;
+    double radius;
     QColor fill = Qt::red;
     QColor countur = Qt::blue;
   };

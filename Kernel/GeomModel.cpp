@@ -117,7 +117,8 @@ void GeomModel::onFieldData(FieldData&& data) {
     using DrawItem = DrawData::Item;
     data_->items.emplace_back(
         DrawItem{.center = {(0.5 + item.column()) * data_->field.width,
-                            (0.5 + item.row()) * data_->field.hight}});
+                            (0.5 + item.row()) * data_->field.hight},
+                 .radius = k_item_radius});
   }
   port_.notify();
 }

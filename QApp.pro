@@ -88,26 +88,26 @@ LIBS += $$CONAN_LIBDIRS_QWT $$CONAN_LIBS_QWT
 #                          $$shell_path($$OUT_PWD)
 #QMAKE_POST_LINK += $${qwt_copy_dll.commands}
 
-#OneApi TBB
-DEFINES += $$CONAN_DEFINES_ONETBB
-INCLUDEPATH += $$CONAN_INCLUDEPATH_ONETBB
-LIBS += $$CONAN_LIBDIRS_ONETBB $$CONAN_LIBS_ONETBB
-# this path contains required dlls and is added to the run environment by QtCreator
-# make sure to check Run option "Add build library search path to Path"
-#LIBS += -L$$CONAN_BINDIRS_ONETBB
+##OneApi TBB
+#DEFINES += $$CONAN_DEFINES_ONETBB
+#INCLUDEPATH += $$CONAN_INCLUDEPATH_ONETBB
+#LIBS += $$CONAN_LIBDIRS_ONETBB $$CONAN_LIBS_ONETBB
+## this path contains required dlls and is added to the run environment by QtCreator
+## make sure to check Run option "Add build library search path to Path"
+##LIBS += -L$$CONAN_BINDIRS_ONETBB
 
 # this copies onetbb dlls to the target executable directory
-CONFIG(debug, debug|release) {
-    BUILD_TYPE = debug
-} else {
-    BUILD_TYPE = release
-}
-QMAKE_EXTRA_TARGETS += onetbb_copy_dll
-onetbb_copy_dll.target = onetbb_dll
-onetbb_copy_dll.commands = $(COPY_DIR) \
-                          $$shell_path($$CONAN_BINDIRS_ONETBB) \
-                          $$shell_path($$OUT_PWD/$$BUILD_TYPE)
-QMAKE_POST_LINK += $${onetbb_copy_dll.commands}
+#CONFIG(debug, debug|release) {
+#    BUILD_TYPE = debug
+#} else {
+#    BUILD_TYPE = release
+#}
+#QMAKE_EXTRA_TARGETS += onetbb_copy_dll
+#onetbb_copy_dll.target = onetbb_dll
+#onetbb_copy_dll.commands = $(COPY_DIR) \
+#                          $$shell_path($$CONAN_BINDIRS_ONETBB) \
+#                          $$shell_path($$OUT_PWD/$$BUILD_TYPE)
+#QMAKE_POST_LINK += $${onetbb_copy_dll.commands}
 
 SOURCES += \
   Interface/MainWindow.cpp \

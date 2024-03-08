@@ -2,6 +2,7 @@
 
 #include "DrawData.h"
 
+#include <QColor>
 #include <QTimer>
 
 #include <functional>
@@ -30,11 +31,15 @@ private Q_SLOTS:
   void onTimer();
 
 private:
+  double getNextRadius() const;
+  QColor getNextColor() const;
+
   Action action_;
   Item current_;
   bool active_ = false;
   int step_ = 0;
   double initial_radius_ = 0.;
+  QColor initial_color_;
   QTimer timer_;
 };
 

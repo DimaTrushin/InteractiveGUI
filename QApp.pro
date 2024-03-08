@@ -124,6 +124,7 @@ SOURCES += \
   ApplicationKernel.cpp \
   ApplicationImpl.cpp \
   Except.cpp \
+  Library/Random.cpp \
   QPorts.cpp \
   QRunTime.cpp \
   main.cpp \
@@ -147,6 +148,7 @@ HEADERS += \
   ApplicationKernel.h \
   ApplicationImpl.h \
   Except.h \
+  Library/Random.h \
   QObserver.h \
   QPorts.h \
   QRunTime.h

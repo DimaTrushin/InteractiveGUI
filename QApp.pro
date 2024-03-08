@@ -117,6 +117,7 @@ SOURCES += \
   Kernel/FieldController.cpp \
   Kernel/FieldModel.cpp \
   Kernel/GeomModel.cpp \
+  Kernel/ItemAnimator.cpp \
   Kernel/Palette.cpp \
   Application.cpp \
   ApplicationGUI.cpp \
@@ -138,6 +139,7 @@ HEADERS += \
   Kernel/FieldModel.h \
   Kernel/GeomModel.h \
   Kernel/ItemAction.h \
+  Kernel/ItemAnimator.h \
   Kernel/MouseAction.h \
   Kernel/Palette.h \
   Application.h \

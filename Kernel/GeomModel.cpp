@@ -9,7 +9,8 @@ namespace QApp {
 namespace Kernel {
 
 GeomModel::GeomModel()
-    : in_port_([this](FieldData&& data) { onFieldData(std::move(data)); }) {
+    : active_animator_([this](const Item& item) { onActiveAnimation(item); }),
+      in_port_([this](FieldData&& data) { onFieldData(std::move(data)); }) {
 }
 
 void GeomModel::subscribeToDrawData(Observer* obs) {
@@ -51,6 +52,7 @@ void GeomModel::onMousePress(const QPointF& position) {
     diff_ = position - data_->items[active_index_].center;
     data_->items[active_index_].fill = palette_.fill(ItemStatus::Active);
     data_->items[active_index_].countur = palette_.countur(ItemStatus::Active);
+    active_animator_.startAnimation(data_->items[active_index_]);
     port_.notify();
   }
 }
@@ -58,6 +60,7 @@ void GeomModel::onMousePress(const QPointF& position) {
 void GeomModel::onMouseMove(const QPointF& position) {
   if (data_.has_value() && active_index_ != k_non) {
     data_->items[active_index_].center = position - diff_;
+    active_animator_.setCenter(position - diff_);
     port_.notify();
   }
 }
@@ -70,6 +73,7 @@ void GeomModel::onMouseRelease(const QPointF& position) {
   size_t index = std::exchange(active_index_, k_non);
   int row = getRow(position);
   int column = getColumn(position);
+  active_animator_.stopAnimation();
   action_port_.set(std::in_place_t(), index, row, column);
 }
 
@@ -127,6 +131,12 @@ void GeomModel::onFieldData(FieldData&& data) {
                  .fill = palette_.fill(ItemStatus::Inactive),
                  .countur = palette_.countur(ItemStatus::Inactive)});
   }
+  port_.notify();
+}
+
+void GeomModel::onActiveAnimation(const Item& item) {
+  assert(data_.has_value() && active_index_ != k_non);
+  data_->items[active_index_] = item;
   port_.notify();
 }
 

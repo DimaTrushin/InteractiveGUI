@@ -3,6 +3,7 @@
 #include "DrawData.h"
 #include "Field.h"
 #include "ItemAction.h"
+#include "ItemAnimator.h"
 #include "MouseAction.h"
 #include "Palette.h"
 #include "QObserver.h"
@@ -13,6 +14,8 @@ namespace QApp {
 namespace Kernel {
 
 class GeomModel {
+
+  using Item = DrawData::Item;
 
   using Data = std::optional<DrawData>;
   using Observable = Library::CObservable<Data>;
@@ -43,11 +46,13 @@ private:
   int getColumn(const QPointF& position) const;
 
   void onFieldData(FieldData&& data);
+  void onActiveAnimation(const Item&);
 
   static constexpr int k_non = -1;
 
   Data data_;
   Palette palette_;
+  ItemAnimator active_animator_;
   int active_index_ = k_non;
   QPointF diff_ = {0., 0.};
   Observable port_ = [this]() -> const Data& { return data_; };

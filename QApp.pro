@@ -110,8 +110,6 @@ onetbb_copy_dll.commands = $(COPY_DIR) \
 QMAKE_POST_LINK += $${onetbb_copy_dll.commands}
 
 SOURCES += \
-  ApplicationGUI.cpp \
-  ApplicationKernel.cpp \
   Interface/MainWindow.cpp \
   Interface/PlotController.cpp \
   Interface/View.cpp \
@@ -119,7 +117,10 @@ SOURCES += \
   Kernel/FieldController.cpp \
   Kernel/FieldModel.cpp \
   Kernel/GeomModel.cpp \
+  Kernel/Palette.cpp \
   Application.cpp \
+  ApplicationGUI.cpp \
+  ApplicationKernel.cpp \
   ApplicationImpl.cpp \
   Except.cpp \
   QPorts.cpp \
@@ -128,8 +129,6 @@ SOURCES += \
 
 
 HEADERS += \
-  ApplicationGUI.h \
-  ApplicationKernel.h \
   Interface/MainWindow.h \
   Interface/PlotController.h \
   Interface/View.h \
@@ -140,7 +139,10 @@ HEADERS += \
   Kernel/GeomModel.h \
   Kernel/ItemAction.h \
   Kernel/MouseAction.h \
+  Kernel/Palette.h \
   Application.h \
+  ApplicationGUI.h \
+  ApplicationKernel.h \
   ApplicationImpl.h \
   Except.h \
   QObserver.h \

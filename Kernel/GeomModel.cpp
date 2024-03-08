@@ -48,7 +48,10 @@ void GeomModel::onMousePress(const QPointF& position) {
   if (index != k_non) {
     active_index_ = index;
     assert(data_.has_value());
-    diff_ = position - data_->items[index].center;
+    diff_ = position - data_->items[active_index_].center;
+    data_->items[active_index_].fill = palette_.fill(ItemStatus::Active);
+    data_->items[active_index_].countur = palette_.countur(ItemStatus::Active);
+    port_.notify();
   }
 }
 
@@ -108,9 +111,9 @@ void GeomModel::onFieldData(FieldData&& data) {
     data_.emplace();
   data_->field.rows = field.rows();
   data_->field.columns = field.columns();
-  data_->field.hight = k_hight;
-  data_->field.width = k_width;
-  data_->field.origin = k_origin;
+  data_->field.hight = palette_.field_hight;
+  data_->field.width = palette_.field_width;
+  data_->field.origin = palette_.field_origin;
 
   data_->items.clear();
   data_->items.reserve(field.items().size());
@@ -120,9 +123,9 @@ void GeomModel::onFieldData(FieldData&& data) {
         DrawItem{.center = QPointF{(0.5 + item.column()) * data_->field.width,
                                    (0.5 + item.row()) * data_->field.hight} +
                            data_->field.origin,
-                 .radius = k_item_radius,
-                 .fill = k_fill,
-                 .countur = k_countur});
+                 .radius = palette_.item_radius,
+                 .fill = palette_.fill(ItemStatus::Inactive),
+                 .countur = palette_.countur(ItemStatus::Inactive)});
   }
   port_.notify();
 }

@@ -105,17 +105,11 @@ void View::draw(const DrawData& data) {
 void View::addItem(const DrawData::Item& item) {
   std::unique_ptr<QwtPlotShapeItem> plot_item =
       std::make_unique<QwtPlotShapeItem>();
-
   QPainterPath path;
   path.addEllipse(item.center, item.radius, item.radius);
   plot_item->setShape(path);
-
-  QPen pen(item.countur);
-  plot_item->setPen(pen);
-
-  QBrush brush(item.fill);
-  plot_item->setBrush(brush);
-
+  plot_item->setPen(QPen(item.countur));
+  plot_item->setBrush(QBrush(item.fill));
   plot_item.release()->attach(plot_.get());
 }
 

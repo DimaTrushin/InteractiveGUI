@@ -9,22 +9,27 @@ namespace QApp {
 namespace Kernel {
 
 struct DrawData {
-  struct FieldData {
+  struct Field {
     int rows;
     int columns;
     double hight;
     double width;
+  };
+  struct FieldOnPlot : Field {
     QPointF origin;
   };
   struct Item {
-    QPointF center;
     double radius;
     QColor fill;
     QColor countur;
   };
 
-  FieldData field;
-  std::vector<Item> items;
+  struct ItemOnField : Item {
+    QPointF center;
+  };
+
+  FieldOnPlot field;
+  std::vector<ItemOnField> items;
 };
 
 } // namespace Kernel

@@ -60,7 +60,6 @@ void GeomModel::onMousePress(const QPointF& position) {
 void GeomModel::onMouseMove(const QPointF& position) {
   if (data_.has_value() && active_index_ != k_non) {
     data_->items[active_index_].center = position - diff_;
-    active_animator_.setCenter(position - diff_);
     port_.notify();
   }
 }
@@ -69,11 +68,11 @@ void GeomModel::onMouseRelease(const QPointF& position) {
   if (active_index_ == k_non)
     return;
   assert(data_.has_value());
+  active_animator_.stopAnimation();
   diff_ = {0., 0.};
   size_t index = std::exchange(active_index_, k_non);
   int row = getRow(position);
   int column = getColumn(position);
-  active_animator_.stopAnimation();
   action_port_.set(std::in_place_t(), index, row, column);
 }
 
@@ -92,12 +91,12 @@ int GeomModel::touchedItem(const QPointF& position) const {
 
 int GeomModel::getRow(const QPointF& position) const {
   assert(data_.has_value());
-  const DrawData::FieldData& field = data_->field;
+  const DrawData::FieldOnPlot& field = data_->field;
   return std::floor((position.y() - field.origin.y()) / field.hight);
 }
 
 int GeomModel::getColumn(const QPointF& position) const {
-  const DrawData::FieldData& field = data_->field;
+  const DrawData::FieldOnPlot& field = data_->field;
   return std::floor((position.x() - field.origin.x()) / field.width);
 }
 
@@ -122,22 +121,25 @@ void GeomModel::onFieldData(FieldData&& data) {
   data_->items.clear();
   data_->items.reserve(field.items().size());
   for (const auto& item : field.items()) {
-    using DrawItem = DrawData::Item;
+    using ItemOnField = DrawData::ItemOnField;
     data_->items.emplace_back(
-        DrawItem{.center = QPointF{(0.5 + item.column()) * data_->field.width,
-                                   (0.5 + item.row()) * data_->field.hight} +
-                           data_->field.origin,
-                 .radius = palette_.item_radius,
-                 .fill = palette_.fill(ItemStatus::Inactive),
-                 .countur = palette_.countur(ItemStatus::Inactive)});
+        ItemOnField{{.radius = palette_.item_radius,
+                     .fill = palette_.fill(ItemStatus::Inactive),
+                     .countur = palette_.countur(ItemStatus::Inactive)},
+                    itemCenter(item, data_->field) + data_->field.origin});
   }
   port_.notify();
 }
 
 void GeomModel::onActiveAnimation(const Item& item) {
   assert(data_.has_value() && active_index_ != k_non);
-  data_->items[active_index_] = item;
+  data_->items[active_index_].Item::operator=(item);
   port_.notify();
+}
+
+QPointF GeomModel::itemCenter(const FieldItem& item, const DrawField& field) {
+  return {(0.5 + item.column()) * field.width,
+          (0.5 + item.row()) * field.hight};
 }
 
 } // namespace Kernel

@@ -41,10 +41,6 @@ void ItemAnimator::stopAnimation() {
   timer_.stop();
 }
 
-void ItemAnimator::setCenter(const QPointF& center) {
-  current_.center = center;
-}
-
 void ItemAnimator::onTimer() {
   if (active_) {
     current_.radius += getNextRadius();

@@ -18,7 +18,9 @@ namespace Interface {
 class View : public QObject {
   Q_OBJECT
   using DrawData = Kernel::DrawData;
-  using FieldData = DrawData::FieldData;
+  using ItemOnField = DrawData::ItemOnField;
+
+  using FieldData = DrawData::FieldOnPlot;
   using Data = std::optional<DrawData>;
   using ObserverState = Library::CObserver<Data>;
 
@@ -49,7 +51,7 @@ private:
   void drawData(Data&& data);
   void clear();
   void draw(const DrawData& data);
-  void addItem(const DrawData::Item& item);
+  void addItem(const ItemOnField& item);
   void drawField(const FieldData& field);
   static QVector<QPointF> makeVerticalPath(const FieldData& field);
   static QVector<QPointF> makeHorizontalPath(const FieldData& field);

@@ -102,7 +102,7 @@ void View::draw(const DrawData& data) {
   plot_->replot();
 }
 
-void View::addItem(const DrawData::Item& item) {
+void View::addItem(const ItemOnField& item) {
   std::unique_ptr<QwtPlotShapeItem> plot_item =
       std::make_unique<QwtPlotShapeItem>();
   QPainterPath path;

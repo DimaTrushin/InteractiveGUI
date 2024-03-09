@@ -25,8 +25,6 @@ public:
   void startAnimation(const Item&);
   void stopAnimation();
 
-  void setCenter(const QPointF&);
-
 private Q_SLOTS:
   void onTimer();
 

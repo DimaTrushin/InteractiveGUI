@@ -15,7 +15,9 @@ namespace Kernel {
 
 class GeomModel {
 
+  using ItemOnField = DrawData::ItemOnField;
   using Item = DrawData::Item;
+  using DrawField = DrawData::FieldOnPlot;
 
   using Data = std::optional<DrawData>;
   using Observable = Library::CObservable<Data>;
@@ -47,6 +49,8 @@ private:
 
   void onFieldData(FieldData&& data);
   void onActiveAnimation(const Item&);
+
+  static QPointF itemCenter(const FieldItem&, const DrawField&);
 
   static constexpr int k_non = -1;
 

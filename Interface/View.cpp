@@ -98,15 +98,15 @@ void View::draw(const DrawData& data) {
   plot_->detachItems();
   drawField(data.field);
   for (const auto& item : data.items)
-    addItem(item);
+    addItem(item, data.field.origin);
   plot_->replot();
 }
 
-void View::addItem(const ItemOnField& item) {
+void View::addItem(const ItemOnField& item, const QPointF& field_origin) {
   std::unique_ptr<QwtPlotShapeItem> plot_item =
       std::make_unique<QwtPlotShapeItem>();
   QPainterPath path;
-  path.addEllipse(item.center, item.radius, item.radius);
+  path.addEllipse(item.center + field_origin, item.radius, item.radius);
   plot_item->setShape(path);
   plot_item->setPen(QPen(item.countur));
   plot_item->setBrush(QBrush(item.fill));

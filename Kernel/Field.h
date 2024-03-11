@@ -42,8 +42,8 @@ private:
   static bool isVerticaleAdjacent(const FieldItem& item, int row, int column);
   static bool isHorizontalAdjacent(const FieldItem& item, int row, int column);
 
-  static constexpr int k_default_rows = 10;
-  static constexpr int k_default_columns = 10;
+  static constexpr int k_default_rows = 5;
+  static constexpr int k_default_columns = 7;
 
   int rows_ = k_default_rows;
   int columns_ = k_default_columns;

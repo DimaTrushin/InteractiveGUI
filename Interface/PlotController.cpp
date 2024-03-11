@@ -25,7 +25,7 @@ void PlotController::control(MouseData&& data) {
 }
 
 void PlotController::controlOnData(const MouseAction& action) {
-  host_->onMouseAction(action);
+  host_->handleMouseAction(action);
 }
 
 } // namespace Interface

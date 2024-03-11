@@ -51,7 +51,7 @@ private:
   void drawData(Data&& data);
   void clear();
   void draw(const DrawData& data);
-  void addItem(const ItemOnField& item);
+  void addItem(const ItemOnField& item, const QPointF& field_origin);
   void drawField(const FieldData& field);
   static QVector<QPointF> makeVerticalPath(const FieldData& field);
   static QVector<QPointF> makeHorizontalPath(const FieldData& field);

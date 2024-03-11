@@ -33,24 +33,28 @@ class GeomModel {
 public:
   GeomModel();
 
-  void subscribeToDrawData(Observer* obs);
-  void onMouseAction(const MouseAction& action);
   ObserverField* port();
+  void subscribeToDrawData(Observer* obs);
   void subscribeToItemAction(ObserverAction* obs);
 
+  void handleMouseAction(const MouseAction& action);
+
 private:
-  void onMousePress(const QPointF& position);
-  void onMouseMove(const QPointF& position);
-  void onMouseRelease(const QPointF& position);
-
-  int touchedItem(const QPointF& position) const;
-  int getRow(const QPointF& position) const;
-  int getColumn(const QPointF& position) const;
-
+  void onMousePress_(const QPointF& position);
+  void onMouseMove_(const QPointF& position);
+  void onMouseRelease_(const QPointF& position);
+  void onActiveAnimation_(const Item&);
   void onFieldData(FieldData&& data);
-  void onActiveAnimation(const Item&);
 
-  static QPointF itemCenter(const FieldItem&, const DrawField&);
+  int getRow_(const QPointF& position) const;
+  int getColumn_(const QPointF& position) const;
+  QPointF itemCenter_(const FieldItem&) const;
+  int touchedItem_(const QPointF& position) const;
+
+  DrawField& field_();
+  const DrawField& field_() const;
+  ItemOnField& item_(int index);
+  const ItemOnField& item_(int index) const;
 
   static constexpr int k_non = -1;
 

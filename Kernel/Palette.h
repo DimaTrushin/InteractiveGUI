@@ -21,9 +21,9 @@ struct ItemStatusF {
 };
 
 struct Palette {
-  double field_hight = 1.;
-  double field_width = 1.;
-  QPointF field_origin = {0., 0.};
+  double field_hight = 2.;
+  double field_width = 3.;
+  QPointF field_origin = {1., 2.};
 
   double item_radius = 0.4 * std::min(field_hight, field_width);
 

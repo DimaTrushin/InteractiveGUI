@@ -9,8 +9,12 @@ namespace QApp {
 namespace Kernel {
 
 GeomModel::GeomModel()
-    : active_animator_([this](const Item& item) { onActiveAnimation(item); }),
+    : active_animator_([this](const Item& item) { onActiveAnimation_(item); }),
       in_port_([this](FieldData&& data) { onFieldData(std::move(data)); }) {
+}
+
+GeomModel::ObserverField* GeomModel::port() {
+  return &in_port_;
 }
 
 void GeomModel::subscribeToDrawData(Observer* obs) {
@@ -18,16 +22,24 @@ void GeomModel::subscribeToDrawData(Observer* obs) {
   port_.subscribe(obs);
 }
 
-void GeomModel::onMouseAction(const MouseAction& action) {
+void GeomModel::subscribeToItemAction(ObserverAction* obs) {
+  assert(obs);
+  action_port_.subscribe(obs);
+}
+
+void GeomModel::handleMouseAction(const MouseAction& action) {
+  if (!data_.has_value())
+    return;
+  QPointF local_position = action.position - field_().origin;
   switch (action.status) {
   case EMouseStatus::Pressed:
-    onMousePress(action.position);
+    onMousePress_(local_position);
     break;
   case EMouseStatus::Moved:
-    onMouseMove(action.position);
+    onMouseMove_(local_position);
     break;
   case EMouseStatus::Released:
-    onMouseRelease(action.position);
+    onMouseRelease_(local_position);
     break;
   default:
     assert(false);
@@ -35,69 +47,43 @@ void GeomModel::onMouseAction(const MouseAction& action) {
   }
 }
 
-GeomModel::ObserverField* GeomModel::port() {
-  return &in_port_;
-}
-
-void GeomModel::subscribeToItemAction(ObserverAction* obs) {
-  assert(obs);
-  action_port_.subscribe(obs);
-}
-
-void GeomModel::onMousePress(const QPointF& position) {
-  int index = touchedItem(position);
+void GeomModel::onMousePress_(const QPointF& position) {
+  assert(data_.has_value());
+  int index = touchedItem_(position);
   if (index != k_non) {
     active_index_ = index;
-    assert(data_.has_value());
-    diff_ = position - data_->items[active_index_].center;
-    data_->items[active_index_].fill = palette_.fill(ItemStatus::Active);
-    data_->items[active_index_].countur = palette_.countur(ItemStatus::Active);
-    active_animator_.startAnimation(data_->items[active_index_]);
+    diff_ = position - item_(active_index_).center;
+    item_(active_index_).fill = palette_.fill(ItemStatus::Active);
+    item_(active_index_).countur = palette_.countur(ItemStatus::Active);
+    active_animator_.startAnimation(item_(active_index_));
     port_.notify();
   }
 }
 
-void GeomModel::onMouseMove(const QPointF& position) {
-  if (data_.has_value() && active_index_ != k_non) {
-    data_->items[active_index_].center = position - diff_;
+void GeomModel::onMouseMove_(const QPointF& position) {
+  assert(data_.has_value());
+  if (active_index_ != k_non) {
+    item_(active_index_).center = position - diff_;
     port_.notify();
   }
 }
 
-void GeomModel::onMouseRelease(const QPointF& position) {
+void GeomModel::onMouseRelease_(const QPointF& position) {
+  assert(data_.has_value());
   if (active_index_ == k_non)
     return;
-  assert(data_.has_value());
   active_animator_.stopAnimation();
   diff_ = {0., 0.};
   size_t index = std::exchange(active_index_, k_non);
-  int row = getRow(position);
-  int column = getColumn(position);
+  int row = getRow_(position);
+  int column = getColumn_(position);
   action_port_.set(std::in_place_t(), index, row, column);
 }
 
-int GeomModel::touchedItem(const QPointF& position) const {
-  if (!data_.has_value())
-    return k_non;
-  int index = data_->items.size() - 1;
-  for (const auto& item : std::ranges::reverse_view(data_->items)) {
-    QPointF diff = item.center - position;
-    if (std::sqrt(QPointF::dotProduct(diff, diff)) < item.radius)
-      return index;
-    --index;
-  }
-  return k_non;
-}
-
-int GeomModel::getRow(const QPointF& position) const {
-  assert(data_.has_value());
-  const DrawData::FieldOnPlot& field = data_->field;
-  return std::floor((position.y() - field.origin.y()) / field.hight);
-}
-
-int GeomModel::getColumn(const QPointF& position) const {
-  const DrawData::FieldOnPlot& field = data_->field;
-  return std::floor((position.x() - field.origin.x()) / field.width);
+void GeomModel::onActiveAnimation_(const Item& item) {
+  assert(data_.has_value() && active_index_ != k_non);
+  item_(active_index_).Item::operator=(item);
+  port_.notify();
 }
 
 void GeomModel::onFieldData(FieldData&& data) {
@@ -112,11 +98,11 @@ void GeomModel::onFieldData(FieldData&& data) {
   const Field& field = *data;
   if (!data_.has_value())
     data_.emplace();
-  data_->field.rows = field.rows();
-  data_->field.columns = field.columns();
-  data_->field.hight = palette_.field_hight;
-  data_->field.width = palette_.field_width;
-  data_->field.origin = palette_.field_origin;
+  field_().rows = field.rows();
+  field_().columns = field.columns();
+  field_().hight = palette_.field_hight;
+  field_().width = palette_.field_width;
+  field_().origin = palette_.field_origin;
 
   data_->items.clear();
   data_->items.reserve(field.items().size());
@@ -126,20 +112,59 @@ void GeomModel::onFieldData(FieldData&& data) {
         ItemOnField{{.radius = palette_.item_radius,
                      .fill = palette_.fill(ItemStatus::Inactive),
                      .countur = palette_.countur(ItemStatus::Inactive)},
-                    itemCenter(item, data_->field) + data_->field.origin});
+                    itemCenter_(item)});
   }
   port_.notify();
 }
 
-void GeomModel::onActiveAnimation(const Item& item) {
-  assert(data_.has_value() && active_index_ != k_non);
-  data_->items[active_index_].Item::operator=(item);
-  port_.notify();
+int GeomModel::getRow_(const QPointF& position) const {
+  assert(data_.has_value());
+  return std::floor(position.y() / field_().hight);
 }
 
-QPointF GeomModel::itemCenter(const FieldItem& item, const DrawField& field) {
-  return {(0.5 + item.column()) * field.width,
-          (0.5 + item.row()) * field.hight};
+int GeomModel::getColumn_(const QPointF& position) const {
+  return std::floor(position.x() / field_().width);
+}
+
+QPointF GeomModel::itemCenter_(const FieldItem& item) const {
+  return {(0.5 + item.column()) * field_().width,
+          (0.5 + item.row()) * field_().hight};
+}
+
+int GeomModel::touchedItem_(const QPointF& position) const {
+  assert(data_.has_value());
+  int index = data_->items.size() - 1;
+  for (const auto& item : std::ranges::reverse_view(data_->items)) {
+    QPointF diff = item.center - position;
+    if (std::sqrt(QPointF::dotProduct(diff, diff)) < item.radius)
+      return index;
+    --index;
+  }
+  return k_non;
+}
+
+GeomModel::DrawField& GeomModel::field_() {
+  assert(data_.has_value());
+  return data_->field;
+}
+
+const GeomModel::DrawField& GeomModel::field_() const {
+  assert(data_.has_value());
+  return data_->field;
+}
+
+GeomModel::ItemOnField& GeomModel::item_(int index) {
+  assert(data_.has_value());
+  assert(size_t(index) < data_->items.size());
+  assert(index >= 0);
+  return data_->items[index];
+}
+
+const GeomModel::ItemOnField& GeomModel::item_(int index) const {
+  assert(data_.has_value());
+  assert(size_t(index) < data_->items.size());
+  assert(index >= 0);
+  return data_->items[index];
 }
 
 } // namespace Kernel

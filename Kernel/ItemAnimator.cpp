@@ -6,9 +6,7 @@
 
 #include <cassert>
 #include <chrono>
-
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <numbers>
 
 namespace QApp {
 namespace Kernel {
@@ -51,7 +49,8 @@ void ItemAnimator::onTimer() {
 }
 
 double ItemAnimator::getNextRadius() const {
-  return 0.1 * initial_radius_ * std::sin((M_PI * step_) / (2. * 2));
+  return 0.1 * initial_radius_ *
+         std::sin((std::numbers::pi * step_) / (2. * 2));
 }
 
 QColor ItemAnimator::getNextColor() const {
@@ -60,9 +59,9 @@ QColor ItemAnimator::getNextColor() const {
   double dr = 0.0;
   double dg = 0.0;
   double db = 0.8;
-  r += dr * (1. + sin((M_PI * step_) / (2. * 5))) / 2.;
-  g += dg * (1. + sin((M_PI * step_) / (2. * 5))) / 2.;
-  b += db * (1. + sin((M_PI * step_) / (2. * 5))) / 2.;
+  r += dr * (1. + sin((std::numbers::pi * step_) / (2. * 5))) / 2.;
+  g += dg * (1. + sin((std::numbers::pi * step_) / (2. * 5))) / 2.;
+  b += db * (1. + sin((std::numbers::pi * step_) / (2. * 5))) / 2.;
   r = std::min(std::max(r, 0.), 1.);
   g = std::min(std::max(g, 0.), 1.);
   b = std::min(std::max(b, 0.), 1.);

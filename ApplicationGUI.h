@@ -14,6 +14,8 @@ public:
 protected:
   MainWindow* mainWindow();
   View* view();
+  View* viewg();
+  View* view2();
 
 private:
   MainWindow main_window_;

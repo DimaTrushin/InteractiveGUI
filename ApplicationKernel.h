@@ -17,7 +17,9 @@ public:
 protected:
   FieldModel model_;
   GeomModel geom_model_;
+  GeomModel geom_model2_;
   FieldController field_controller_;
+  FieldController field_controller2_;
 };
 
 } // namespace QApp

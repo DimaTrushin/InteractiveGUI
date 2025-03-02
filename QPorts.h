@@ -11,43 +11,43 @@ namespace Library {
 namespace detail {
 
 class Message : public QEvent {
+  using CPointer = QPointer<QObject>;
+
 public:
   static QEvent::Type type();
 
-  Message(QObject* address, const std::any& data);
-  Message(QObject* address, std::any&& data);
+  Message(CPointer from, CPointer to, const std::any& data);
+  Message(CPointer from, CPointer to, std::any&& data);
 
   std::any&& extract();
 
   bool isAlive() const;
-  QObject* receiver() const;
+  CPointer receiver() const;
+
+  CPointer to() const;
+  CPointer from() const;
 
 private:
-  QPointer<QObject> address_;
+  CPointer from_;
+  CPointer to_;
   std::any data_;
 };
 
 } // namespace detail
 
-class QSender : public QObject {
+class QPort : public QObject {
   Q_OBJECT
   using Message = detail::Message;
 
-public:
-  void send(QObject* receiver, std::any data) const;
-
-private:
-};
-
-class QReceiver : public QObject {
-  Q_OBJECT
-  using Message = detail::Message;
+protected:
+  using CPointer = QPointer<QObject>;
 
 public:
+  void send(CPointer from, CPointer to, std::any data) const;
   bool event(QEvent* event) override;
 
 protected:
-  virtual void action(std::any&& data) = 0;
+  virtual void action(CPointer from, std::any&& data) = 0;
 
 private:
   static constexpr bool k_is_processed = true;

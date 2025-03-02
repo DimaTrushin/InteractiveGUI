@@ -15,8 +15,8 @@ PlotController::PlotController(GeomModel* host)
   assert(host_);
 }
 
-PlotController::Observer* PlotController::port() {
-  return &port_;
+PlotController::ObserverPtr PlotController::port() {
+  return port_.address();
 }
 
 void PlotController::control(MouseData&& data) {

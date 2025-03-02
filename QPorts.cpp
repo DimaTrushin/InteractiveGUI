@@ -20,12 +20,13 @@ QEvent::Type Message::type() {
   return QEvent::Type(message_type);
 }
 
-Message::Message(QObject* address, const std::any& data)
-    : QEvent(type()), address_(address), data_(data) {
+Message::Message(CPointer from, CPointer to, const std::any& data)
+    : QEvent(type()), from_(std::move(from)), to_(std::move(to)), data_(data) {
 }
 
-Message::Message(QObject* address, std::any&& data)
-    : QEvent(type()), address_(address), data_(std::move(data)) {
+Message::Message(CPointer from, CPointer to, std::any&& data)
+    : QEvent(type()), from_(std::move(from)), to_(std::move(to)),
+      data_(std::move(data)) {
 }
 
 std::any&& Message::extract() {
@@ -33,23 +34,32 @@ std::any&& Message::extract() {
 }
 
 bool Message::isAlive() const {
-  return address_;
+  return to_;
 }
 
-QObject* Message::receiver() const {
-  return address_;
+Message::CPointer Message::receiver() const {
+  return to_;
+}
+
+Message::CPointer Message::to() const {
+  return to_;
+}
+
+Message::CPointer Message::from() const {
+  return from_;
 }
 } // namespace detail
 
-void QSender::send(QObject* receiver, std::any data) const {
-  QCoreApplication::postEvent(QCoreApplication::instance(),
-                              new Message(receiver, std::move(data)));
+void QPort::send(CPointer from, CPointer to, std::any data) const {
+  QCoreApplication::postEvent(
+      QCoreApplication::instance(),
+      new Message(std::move(from), std::move(to), std::move(data)));
 }
 
-bool QReceiver::event(QEvent* event) {
+bool QPort::event(QEvent* event) {
   if (event->type() == Message::type()) {
     Message* msg = static_cast<Message*>(event);
-    action(msg->extract());
+    action(msg->from(), msg->extract());
     return k_is_processed;
   }
   return QObject::event(event);

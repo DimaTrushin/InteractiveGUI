@@ -13,16 +13,16 @@ GeomModel::GeomModel()
       in_port_([this](FieldData&& data) { onFieldData(std::move(data)); }) {
 }
 
-GeomModel::ObserverField* GeomModel::port() {
-  return &in_port_;
+GeomModel::ObserverFieldPtr GeomModel::port() {
+  return in_port_.address();
 }
 
-void GeomModel::subscribeToDrawData(Observer* obs) {
+void GeomModel::subscribeToDrawData(ObserverPtr obs) {
   assert(obs);
   port_.subscribe(obs);
 }
 
-void GeomModel::subscribeToItemAction(ObserverAction* obs) {
+void GeomModel::subscribeToItemAction(ObserverActionPtr obs) {
   assert(obs);
   action_port_.subscribe(obs);
 }
@@ -133,7 +133,7 @@ QPointF GeomModel::itemCenter_(const FieldItem& item) const {
 
 int GeomModel::touchedItem_(const QPointF& position) const {
   assert(data_.has_value());
-  int index = data_->items.size() - 1;
+  int index = static_cast<int>(data_->items.size()) - 1;
   for (const auto& item : std::ranges::reverse_view(data_->items)) {
     QPointF diff = item.center - position;
     if (std::sqrt(QPointF::dotProduct(diff, diff)) < item.radius)

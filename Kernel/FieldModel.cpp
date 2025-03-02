@@ -8,7 +8,7 @@ namespace Kernel {
 FieldModel::FieldModel() : field_(std::in_place_t()) {
 }
 
-void FieldModel::subscribe(ObserverField* obs) {
+void FieldModel::subscribe(ObserverFieldPtr obs) {
   assert(obs);
   port_.subscribe(obs);
 }

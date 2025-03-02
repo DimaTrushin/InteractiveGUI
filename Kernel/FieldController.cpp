@@ -13,8 +13,8 @@ FieldController::FieldController(FieldModel* model)
   assert(host_);
 }
 
-FieldController::Observer* FieldController::port() {
-  return &port_;
+FieldController::ObserverPtr FieldController::port() {
+  return port_.address();
 }
 
 void FieldController::onItemData(ItemData&& data) {

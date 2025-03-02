@@ -13,11 +13,12 @@ class FieldModel {
   using FieldData = std::optional<Field>;
   using ObservableField = Library::CObservable<FieldData>;
   using ObserverField = Library::CObserver<FieldData>;
+  using ObserverFieldPtr = ObserverField::CPointer;
 
 public:
   FieldModel();
 
-  void subscribe(ObserverField* obs);
+  void subscribe(ObserverFieldPtr obs);
   void makeMove(const ItemAction& action);
 
 private:

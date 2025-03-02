@@ -41,11 +41,11 @@ View::View()
 
 View::~View() = default;
 
-View::ObserverState* View::port() {
-  return &in_port_;
+View::ObserverStatePtr View::port() {
+  return in_port_.address();
 }
 
-void View::subscribe(ObserverMouse* obs) {
+void View::subscribe(ObserverMousePtr obs) {
   assert(obs);
   out_port_.subscribe(obs);
 }

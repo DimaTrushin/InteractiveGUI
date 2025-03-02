@@ -13,10 +13,11 @@ class FieldModel;
 class FieldController {
   using ItemData = std::optional<ItemAction>;
   using Observer = Library::CObserver<ItemData>;
+  using ObserverPtr = Observer::CPointer;
 
 public:
   FieldController(FieldModel* model);
-  Observer* port();
+  ObserverPtr port();
 
 private:
   void onItemData(ItemData&& data);

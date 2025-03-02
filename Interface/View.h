@@ -23,19 +23,21 @@ class View : public QObject {
   using FieldData = DrawData::FieldOnPlot;
   using Data = std::optional<DrawData>;
   using ObserverState = Library::CObserver<Data>;
+  using ObserverStatePtr = ObserverState::CPointer;
 
   using EMouseStatus = Kernel::EMouseStatus;
   using MouseAction = Kernel::MouseAction;
   using MouseData = std::optional<MouseAction>;
   using ObservableMouse = Library::CObservableDataMono<MouseData>;
   using ObserverMouse = Library::CObserver<MouseData>;
+  using ObserverMousePtr = ObserverMouse::CPointer;
 
 public:
   View();
   ~View();
 
-  ObserverState* port();
-  void subscribe(ObserverMouse* obs);
+  ObserverStatePtr port();
+  void subscribe(ObserverMousePtr obs);
 
   QwtPlot* plot();
 

@@ -18,11 +18,12 @@ class PlotController {
   using MouseAction = Kernel::MouseAction;
   using MouseData = std::optional<MouseAction>;
   using Observer = Library::CObserver<MouseData>;
+  using ObserverPtr = Observer::CPointer;
 
 public:
   PlotController(GeomModel* host);
 
-  Observer* port();
+  ObserverPtr port();
 
 private:
   void control(MouseData&& data);

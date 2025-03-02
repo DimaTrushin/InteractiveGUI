@@ -22,20 +22,23 @@ class GeomModel {
   using Data = std::optional<DrawData>;
   using Observable = Library::CObservable<Data>;
   using Observer = Library::CObserver<Data>;
+  using ObserverPtr = Observer::CPointer;
 
   using FieldData = std::optional<Field>;
   using ObserverField = Library::CObserver<FieldData>;
+  using ObserverFieldPtr = ObserverField::CPointer;
 
   using ItemData = std::optional<ItemAction>;
   using ObservableAction = Library::CObservableDataMono<ItemData>;
   using ObserverAction = Library::CObserver<ItemData>;
+  using ObserverActionPtr = ObserverAction::CPointer;
 
 public:
   GeomModel();
 
-  ObserverField* port();
-  void subscribeToDrawData(Observer* obs);
-  void subscribeToItemAction(ObserverAction* obs);
+  ObserverFieldPtr port();
+  void subscribeToDrawData(ObserverPtr obs);
+  void subscribeToItemAction(ObserverActionPtr obs);
 
   void handleMouseAction(const MouseAction& action);
 

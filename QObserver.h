@@ -14,10 +14,8 @@ namespace Library {
 
 namespace detail {
 
-enum class Command { Subscribe, Unsubscribe };
-
 struct ServiceData {
-  using Command = Command;
+  enum class Command { Subscribe, Unsubscribe };
   Command cmd;
 };
 

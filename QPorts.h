@@ -11,9 +11,9 @@ namespace Library {
 namespace detail {
 
 class Message : public QEvent {
+public:
   using CPointer = QPointer<QObject>;
 
-public:
   static QEvent::Type type();
 
   Message(CPointer from, CPointer to, const std::any& data);
@@ -37,12 +37,10 @@ private:
 
 class QPort : public QObject {
   Q_OBJECT
-  using Message = detail::Message;
-
-protected:
-  using CPointer = QPointer<QObject>;
-
 public:
+  using Message = detail::Message;
+  using CPointer = Message::CPointer;
+
   void send(CPointer from, CPointer to, std::any data) const;
   bool event(QEvent* event) override;
 

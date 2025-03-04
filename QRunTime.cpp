@@ -9,7 +9,7 @@ QRunTime::QRunTime(int& argc, char** argv) : QApplication(argc, argv) {
 }
 
 bool QRunTime::eventFilter(QObject* obj, QEvent* event) {
-  using Message = Library::detail::Message;
+  using Message = QApp::Library::QPort::Message;
   if (event->type() == Message::type()) {
     Message* msg = static_cast<Message*>(event);
     if (msg->isAlive())
